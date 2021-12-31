@@ -55,31 +55,31 @@ function get_url()
 function get_exemple($table_name)
 {
   return '
-    <pre class="col-12 bg-dark p-3 text-white">
-            get_' . $table_name . '(){
-                let api_url="' . get_url() . 'get"; // recevoir tout
-                //let api_url="' . get_url() . 'get?id_' . $table_name . '=1"; // recevoir le(a) ' . $table_name . ' d\'identifiant 1
+    <div class="row position-relative my-4">
+      <div id="get_exemple" class="col-12">
+        get_' . $table_name . '(){
+          let api_url="' . get_url() . '/get";   //recevoir tout
+          //let api_url="' . get_url() . '/get?id_' . $table_name . '=1"; // recevoir le(a) ' . $table_name . ' d\'identifiant 1
 
-                this.http.get(api_url).subscribe((reponse:any)=>{
-                    //when success
-                    if(reponse.status){
-                        console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse= ",reponse);
-                    }else{
-                        console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse= ",reponse);
-                    }
-                },
-                (error:any)=>{
-                    //when error
-                    console.log("Erreur inconnue! ",error);
-                })
-            }
-        </pre>
-        ';
+          this.http.get(api_url).subscribe((reponse:any)=>{
+              //when success
+              if(reponse.status){
+                  console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse= ",reponse);
+              }else{
+                  console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse= ",reponse);
+              }
+          },
+          (error:any)=>{
+              //when error
+              console.log("Erreur inconnue! ",error);
+          })
+        }
+      </div>
+    </div>
+  ';
 }
 
-function add_exemple($table_name, $description)
-{
-
+function getParamsForAdd($description){
   $keysValues = array();
   foreach ($description as $key => $value) {
     if ($value["Key"] == "PRI") { //cle primaire
@@ -88,39 +88,48 @@ function add_exemple($table_name, $description)
       $keysValues[] = $value["Field"] . ":'" . $value["Type"] . "'";
     }
   }
-  $ts_object = implode(",\n", $keysValues);
-  return '<pre class="col-12 bg-dark p-3 text-white">
-    add_' . $table_name . '(' . $table_name . ':any){
-        /*
-        ' . $table_name . ':any={
-          ' . $ts_object . '
-        }
-        */
-        //transformation des parametres à envoyer
-        let formdata=new FormData()
-        for (const key in ' . $table_name . ') {
-          formdata.append(key,' . $table_name . '[key])
-        }
-    
-        let api_url="' . get_url() . 'add" 
-        this.http.post(api_url,formdata).subscribe((reponse:any)=>{
-          //when success
-          if(reponse.status){
-            console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse= ",reponse)
-          }else{
-            console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse= ",reponse)
-          }
-        },
-        (error:any)=>{
-          //when error
-          console.log("Erreur inconnue! ",error)
-        })
+  $ts_object = implode(",\n\t\t", $keysValues);
+  return <<<HTML
+    <div id="json_add" class="col-12">
+      {
+        $ts_object
       }
-            </pre>';
+    </div>
+HTML;
 }
-function edit_exemple($table_name, $description)
-{
 
+function add_exemple($table_name)
+{
+  return '
+    <div class="row position-relative my-4">
+      <div id="add_exemple" class="col-12">
+        add_' . $table_name . '(' . $table_name . ': any){
+          //transformation des parametres à envoyer
+          let formdata = new FormData()
+          for (const key in ' . $table_name . ') {
+            formdata.append(key, ' . $table_name . '[key])
+          }
+      
+          let api_url = "' . get_url() . '/add" 
+          this.http.post(api_url, formdata).subscribe((reponse: any) => {
+            //when success
+            if(reponse.status){
+              console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse = ",reponse)
+            }else{
+              console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse = ",reponse)
+            }
+          },
+          (error: any) => {
+            //when error
+            console.log("Erreur inconnue! ", error)
+          })
+        }
+      </div>
+    </div>
+  ';
+}
+
+function getParamsForEdit($description){
   $keysValues = array();
   foreach ($description as $key => $value) {
     if ($value["Key"] == "PRI") { //cle primaire
@@ -133,74 +142,92 @@ function edit_exemple($table_name, $description)
       $keysValues[] = $value["Field"] . ":'" . $value["Type"] . " (facultatif)'";
     }
   }
-  $ts_object = implode(",\n", $keysValues);
-  return '<pre class="col-12 bg-dark p-3 text-white">
-    edit_' . $table_name . '(' . $table_name . ':any){
-        /*
-        ' . $table_name . ':any={
-          ' . $ts_object . '
-        }
-        */
-        //transformation des parametres à envoyer
-        let formdata=new FormData()
-        for (const key in ' . $table_name . ') {
-          formdata.append(key,' . $table_name . '[key])
-        }
-    
-        let api_url="' . get_url() . 'edit" 
-        this.http.post(api_url,formdata).subscribe((reponse:any)=>{
-          //when success
-          if(reponse.status){
-            console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse= ",reponse)
-          }else{
-            console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse= ",reponse)
-          }
-        },
-        (error:any)=>{
-          //when error
-          console.log("Erreur inconnue! ",error)
-        })
+  $ts_object = implode(",\n\t\t", $keysValues);
+  return <<<HTML
+    <div id="json_edit" class="col-12">
+      {
+        $ts_object
       }
-            </pre>';
+    </div>
+HTML;
 }
-function delete_exemple($table_name, $description)
-{
 
-  $keysValues = array();
+function edit_exemple($table_name)
+{
+  return '
+    <div class="row position-relative my-4">
+      <div id="edit_exemple" class="col-12">
+        edit_' . $table_name . '(' . $table_name . ': any){
+          //transformation des parametres à envoyer
+          let formdata = new FormData()
+          for (const key in ' . $table_name . ') {
+            formdata.append(key, ' . $table_name . '[key])
+          }
+      
+          let api_url = "' . get_url() . '/edit" 
+          this.http.post(api_url, formdata).subscribe((reponse: any)=>{
+            //when success
+            if(reponse.status){
+              console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse = ",reponse)
+            }else{
+              console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse = ",reponse)
+            }
+          },
+          (error: any)=>{
+            //when error
+            console.log("Erreur inconnue! ",error)
+          })
+        }
+      </div>
+    </div>
+  ';
+}
+
+function getParamsForDelete($description){
   foreach ($description as $key => $value) {
     if ($value["Key"] == "PRI") { //cle primaire
       $keysValues[] = $value["Field"] . ":'" . $value["Type"] . " (primary key, obligatoire)'";
     }
   }
-  $ts_object = implode(",\n", $keysValues);
-  return '<pre class="col-12 bg-dark p-3 text-white">
-    delete_' . $table_name . '(' . $table_name . ':any){
-        /*
-        ' . $table_name . ':any={
-          ' . $ts_object . '
-        }
-        */
-        //transformation des parametres à envoyer
-        let formdata=new FormData()
-        for (const key in ' . $table_name . ') {
-          formdata.append(key,' . $table_name . '[key])
-        }
-    
-        let api_url="' . get_url() . 'delete" 
-        this.http.post(api_url,formdata).subscribe((reponse:any)=>{
-          //when success
-          if(reponse.status){
-            console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse= ",reponse)
-          }else{
-            console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse= ",reponse)
-          }
-        },
-        (error:any)=>{
-          //when error
-          console.log("Erreur inconnue! ",error)
-        })
+  $ts_object = implode(",\n\t\t", $keysValues);
+  return <<<HTML
+    <div id="json_delete" class="col-12">
+      {
+        $ts_object
       }
-            </pre>';
+    </div>
+HTML;
+}
+
+function delete_exemple($table_name)
+{
+  return '
+    <div class="row position-relative my-4">
+      <div id="delete_exemple" class="col-12">
+        delete_' . $table_name . '(' . $table_name . ': any){
+          //transformation des parametres à envoyer
+          let formdata = new FormData()
+          for (const key in ' . $table_name . ') {
+            formdata.append(key, ' . $table_name . '[key])
+          }
+      
+          let api_url="' . get_url() . 'delete" 
+          this.http.post(api_url, formdata).subscribe((reponse: any)=>{
+            //when success
+            if(reponse.status){
+              console.log("Opération effectuée avec succés sur la table ' . $table_name . '. Réponse = ",reponse)
+            }else{
+              console.log("L\'opération sur la table ' . $table_name . ' a échoué. Réponse = ",reponse)
+            }
+          },
+          (error: any)=>{
+            //when error
+            console.log("Erreur inconnue! ",error)
+          })
+        }
+      </div>
+    </div>
+  ';
 }
 function table_documentation($table_name, $description)
 {
@@ -211,13 +238,61 @@ function table_documentation($table_name, $description)
       $action = str_replace(".php", "", $value);
       echo "<li>$action <a href='./$action'> --------> voir exemple</a></li>";
       if ($action == "get") {
-        echo get_exemple($table_name);
+        $code = get_exemple($table_name);
+        echo <<<HTML
+          <div class="row">
+            <p class="col-12 text-justify fs-4">
+              L'action get permet d'obtenir des données de votre table <span class="text-danger">$table_name</span>, grâce 
+              à la fonction ci-dessous vous pouvez récupérer une donnée spécifique ou toutes les données.
+            </p>
+          </div>
+          $code
+HTML;
       } else if ($action == "add") {
-        echo add_exemple($table_name, $description);
+        $data = getParamsForAdd($description);
+        $code = add_exemple($table_name);
+        echo <<<HTML
+          <div class="row">
+            <p class="col-12 text-justify fs-4">
+              L'action add permet d'ajouter des données dans votre table <span class="text-danger">$table_name</span>, grâce 
+              à la fonction ci-dessous vous pouvez ajouter des lignes dans votre table. <br>
+              Cette fonction prend en paramètre un objet dont les clés correspondent aux attributs de la table $table_name dont 
+              vous souhaitez affecter une nouvelle valeur.
+            </p>
+            $data
+          </div>
+          $code
+HTML;
       } else if ($action == "edit") {
-        echo edit_exemple($table_name, $description);
+        $data = getParamsForEdit($description);
+        $code = edit_exemple($table_name, $description);
+        echo <<<HTML
+          <div class="row">
+            <p class="col-12 text-justify fs-4">
+              L'action edit permet de modifier des données dans votre table <span class="text-danger">$table_name</span>, grâce 
+              à la fonction ci-dessous vous pouvez modifier des lignes de votre table. <br>
+              Cette fonction prend en paramètre un objet dont les clés correspondent aux attributs de la table $table_name dont vous
+              souhaitez modifier.
+            </p>
+            $data
+          </div>
+          $code
+HTML;
       } else if ($action == "delete") {
-        echo delete_exemple($table_name, $description);
+        $data = getParamsForDelete($description);
+        $code = delete_exemple($table_name, $description);
+        echo <<<HTML
+          <div class="row">
+            <p class="col-12 text-justify fs-4">
+              L'action delete permet de supprimer des données de votre table <span class="text-danger">$table_name</span>, grâce 
+              à la fonction ci-dessous vous pouvez supprimer des lignes de votre table. <br>
+              Cette fonction prend en paramètre un objet dont les clés correspondent aux attributs de la table $table_name et dont 
+              les valeurs permettent de définir la condition de suppression d'une ligne de la table.
+            </p>
+            $data
+          </div>
+          $code
+HTML;
       }
     }
   }

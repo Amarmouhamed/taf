@@ -20,13 +20,35 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAF</title>
     <link href="../bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        #get_exemple,
+        #add_exemple,
+        #edit_exemple,
+        #delete_exemple{
+            height: 500px;
+            max-height: 750px;
+            font-size: 14px;
+        }
+
+        #json_add,
+        #json_edit,
+        #json_delete{
+            height: 300px;
+            max-height: 500px;
+            font-size: 14px;
+        }
+
+        #json_delete{
+            height: 200px;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-dark">
             <div class="container-fluid">
-                <a href='../taf' class="navbar-brand text-danger">TAF</a>
+                <a href='../taf.php' class="navbar-brand text-danger">TAF</a>
                 <a href="https://h24code.com/donate.html" target="_blank" class="px-2 right"><button class="btn btn-secondary">Faire un don</button></a>
             </div>
         </nav>
@@ -52,12 +74,39 @@ try {
             </ol>
             </p>
             <h1>Action(s) possible(s) dans la table <span class="text-danger"><?= $table_name ?></span></h1>
-            <p class="col-12 fs-3 text-justify">
-                <?php
+            <?php
                 table_documentation($table_name, $description);
-                ?>
-            </p>
+            ?>
     </main>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var globConfig = {
+        selectionStyle: "text",
+        readOnly: true,
+        showLineNumbers: false,
+        showGutter: false
+    };
 
+    var configJs = {
+        mode: "ace/mode/javascript",
+        theme: "ace/theme/monokai",
+        ...globConfig
+    };
+
+    var configJson = {
+        mode: "ace/mode/javascript",
+        theme: "ace/theme/github",
+        ...globConfig
+    };
+
+    var editor_get = ace.edit('get_exemple', configJs),
+        editor_add = ace.edit('add_exemple', configJs),
+        editor_edit = ace.edit('edit_exemple', configJs),
+        editor_delete = ace.edit('delete_exemple', configJs);
+
+    var json_add = ace.edit('json_add', configJson),
+        json_edit = ace.edit('json_edit', configJson),
+        json_delete = ace.edit('json_delete', configJson);
+</script>
 </html>
