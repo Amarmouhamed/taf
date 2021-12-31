@@ -1,5 +1,5 @@
 <?php
-echo "<h1><a href='./amar_api'>Accueil</a></h1>";
+echo "<h1><a href='./taf'>Accueil</a></h1>";
 try {
     require './config.php';
     if(!isset($_GET["table"]) && !isset($_GET["tout"])){
@@ -28,6 +28,7 @@ try {
     if(isset($_GET["table"])){
         $table_name=$_GET["table"];
         generate($table_name);
+        header('location:./taf#table_'.$table_name);
     }elseif(isset($_GET["tout"])){
         $query = "SHOW TABLES";
         $tables = $connexion->query($query)->fetchAll(PDO::FETCH_ASSOC);
@@ -35,6 +36,7 @@ try {
             $table_name = $value["Tables_in_" . $database_name];
             generate($table_name);
         }
+        header('location:./taf#mes_tables');
     }
     
 
