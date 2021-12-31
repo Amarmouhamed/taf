@@ -26,7 +26,7 @@ function dynamicCondition($assoc_array,$operateur){
     foreach($assoc_array as $key => $value){
         $keyOperateurValue[] = addslashes($key)." ".$operateur." '".addslashes( $value)."'";
     }
-    return "where ".implode(",", $keyOperateurValue);
+    return "where ".implode(" and ", $keyOperateurValue);
 }
 function mode($mode_deploiement){
     if($mode_deploiement){

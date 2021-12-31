@@ -1,5 +1,5 @@
 <?php
-echo "<h1><a href='../amar_api'>Accueil</a></h1>";
+echo "<h1><a href='../taf'>Accueil</a></h1>";
 try {
     require './config.php';
     mode($mode_deploiement);
