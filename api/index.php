@@ -24,7 +24,8 @@ try {
         #get_exemple,
         #add_exemple,
         #edit_exemple,
-        #delete_exemple{
+        #delete_exemple,
+        #add_form{
             height: 500px;
             max-height: 750px;
             font-size: 14px;
@@ -61,7 +62,7 @@ try {
                 <?php
                 try {
                     foreach ($description as $key => $value) {
-                        echo "<li>" . $value["Field"] . "</li>";
+                        echo "<li class=\"fs-4\">" . $value["Field"] . "</li>";
                     }
                 } catch (\Throwable $th) {
                     $reponse["status"] = false;
@@ -100,10 +101,17 @@ try {
         ...globConfig
     };
 
+    var configHtml = {
+        mode: "ace/mode/html",
+        theme: "ace/theme/monokai",
+        ...globConfig
+    };
+
     var editor_get = ace.edit('get_exemple', configJs),
         editor_add = ace.edit('add_exemple', configJs),
         editor_edit = ace.edit('edit_exemple', configJs),
-        editor_delete = ace.edit('delete_exemple', configJs);
+        editor_delete = ace.edit('delete_exemple', configJs),
+        editor_form = ace.edit('add_form', configHtml);
 
     var json_add = ace.edit('json_add', configJson),
         json_edit = ace.edit('json_edit', configJson),
