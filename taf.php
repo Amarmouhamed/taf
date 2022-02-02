@@ -43,7 +43,7 @@ try {
         </header>
         <main class="container mt-5">
             <div class="row">
-                <p class="col-12 fs-3 text-justify">
+                <p class="col-12 text-justify fs-4">
                     TAF est un générateur automatique d'api à partir d'une base de données <strong>MYSQL</strong>. Une fois
                     que vous avez bien configuré le fichier de configuration (config.php), grâce à l'api vous pouvez voir toutes
                     les tables de votre base de données et ainsi générer les fichiers nécessaires à la manipulation de ces tables

@@ -36,7 +36,7 @@ try {
             $table_name = $value["Tables_in_" . $database_name];
             generate($table_name);
         }
-        header('location:./taf#mes_tables');
+        header('location: taf.php');
     }
     
 
