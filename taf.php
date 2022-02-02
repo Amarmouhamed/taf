@@ -59,7 +59,7 @@ try {
                         $dir    = './';
                         $files = scandir($dir);
                         foreach ($tables as $key => $value) {
-                            $table_name = $value["Tables_in_" . $database_name];
+                            $table_name = $value["Tables_in_" . strtolower($database_name)];
                             if (array_search($table_name, $files)) {
                                 echo "<li id='table_$table_name' class='list-group-item fs-3  d-flex justify-content-between align-items-center bg-light'><span>" . $table_name . "</span><a class='px-2 right' href='./$table_name'><button class='btn btn-primary'> --------> voir exemple </button></a></li>";
                             } else {
